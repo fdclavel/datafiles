@@ -1,0 +1,361 @@
+TITLE: EA support paper 2020rev -  emo supp (2 TYPES) w WALD (FULL MODEL)
+DATA: FILE = ea-es.MPLUS8.csv;
+
+!Wald tests have been added after running this script
+!to find out where gender differences should
+!be tested, and where within-partner estimates should
+!be tested
+
+
+VARIABLE: NAMES =
+CoupleID  TIME         time7c             Weekend           
+ID1_M     ID1_F        ROLE_M             ROLE_F            
+bSEX_M    pbSEX_M      bSEX_F             pbSEX_F           
+bEMP_Mc   bRSAT_Mc     bNEG_Mc 
+bEMP_Fc   bRSAT_Fc     bNEG_Fc 
+dNAs_M    dNAp_M
+dNAs_F    dNAp_F       
+dNAsMcwd  dNApMcwd      
+dNAsFcwd  dNApFcwd      
+TI_NAs_M  TI_NAp_M     
+TI_NAs_F  TI_NAp_F         
+TI_NAsMc  TI_NApMc     
+TI_NAsFc  TI_NApFc
+dNAsM_sd  dNApM_sd     dNAsF_sd          dNApF_sd          
+dNAsF_Z   dNAsM_Z      dNAsF_ZX          dNAsM_ZX          
+dSpEMO2M  dSpINS2M  
+dSsEMO2M  dSsINS2M     
+dSrEMO2M  dSrINS2M    
+dSpEMO2F  dSpINS2F  
+dSsEMO2F  dSsINS2F     
+dSrEMO2F  dSrINS2F   
+dSpEM2Mc  dSsEM2Mc     dSrEM2Mc         
+dSpIN2Mc  dSsIN2Mc     dSrIN2Mc
+dSpEM2Fc  dSsEM2Fc     dSrEM2Fc         
+dSpIN2Fc  dSsIN2Fc     dSrIN2Fc
+TIpEM2Mc  TIsEM2Mc     TIrEM2Mc         
+TIpIN2Mc  TIsIN2Mc     TIrIN2Mc
+TIpEM2Fc  TIsEM2Fc     TIrEM2Fc         
+TIpIN2Fc  TIsIN2Fc     TIrIN2Fc
+
+ 
+;
+
+
+	
+	USEVARIABLES = 
+	
+	!-------
+	! Level 1 dependent variables
+	!-------
+	
+	! Outcome variables - CLUSTERED SUPPORT PROVISION
+    	!(because these are binary, we will assign them as categorical 
+    	! after the USEVARIABLES statement)              
+         dSpEMO2F dSpEMO2M
+	
+	!--------
+	! Level 1 predictor variables (daily variables)
+	!--------
+	
+	dNAsFcwd  !daily negative mood - women
+	dNApMcwd  !daily perceived women's negative mood
+         dNAsMcwd  !daily negative mood - men
+         dNApFcwd  !daily perceived men's negative mood
+                   
+         !covariates at the daily level
+         
+         !time7c	 !diary day (centered at day 7)
+         Weekend	!Weekend (0=weekday, 1=weekend)
+                   
+         !dSAsMcwd  !daily awareness of support needs - men 
+         !dSApMcwd  !daily men's rating of women's awareness of men's support needs     
+         !dEEsMcwd  !daily emotional expressiveness - men        
+         !dEEpMcwd  !daily men's perceived emotional expressiveness of women
+         
+         !dSAsFcwd  !daily awareness of support needs - women 
+         !dSApFcwd  !daily women's rating of men's awareness of women's support needs     
+         !dEEsFcwd  !daily emotional expressiveness - women        
+         !dEEpFcwd  !daily women's perceived emotional expressiveness of men
+       
+         !dEA_Mcwd  !daily self-rated empathic accuracy, male          
+         !dEA_Fcwd  !daily self-rated empathic accuracy, female          
+         
+         !reciprocity variables
+         !dSrEMO_M  !men receiving emotional support
+         !dSrEMO_F  !women receiving emotional support        
+         dSrEMO2M  !men receiving (EMOTIONAL + ESTEEM) support
+         dSrEMO2F  !women receiving (EMOTIONAL + ESTEEM) support           
+         
+         !----------          
+    	! Level 2 predictor variables (dyad-level, time-invariant [TI] variables)
+         !----------
+                   
+         ! Daily negative mood (TI)
+         TI_NAsFc 
+        ! TI_NApMc
+         TI_NAsMc 
+        ! TI_NApFc
+                   
+         ! Daily support awarness and emotional expressiveness (TI; self + partner)
+         
+         !men's
+         !TI_SAsMc       
+         !TI_SApMc         
+         !TI_EEsMc            
+         !TI_EEpMc
+         !women's
+         !TI_SAsFc        
+         !TI_SApFc          
+         !TI_EEsFc             
+         !TI_EEpFc    
+         
+         !TI empathic accuracy and receipt of TYPE2 support
+         
+         !men's
+         !TI_EA_Mc
+         TIrEM2Mc
+         !women's
+         !TI_EA_Fc	
+         TIrEM2Fc
+         
+         ! Trait-like covariates -- empathy and negative emotionality         
+         bEMP_Mc  bEMP_Fc        
+         bNEG_Mc  bNEG_Fc
+         !bRSAT_Mc bRSAT_Fc   
+                   
+         
+         ;
+
+    !Defining which ones are categorical outcomes
+    CATEGORICAL = dSpEMO2F dSpEMO2M;
+	
+	! Any variable that is ONLY a within dyad variable
+	! goes next to the 'WITHIN =' statment
+	! Usually the variable is only within if the mean
+	! has been removed (i.e., centering within dyad member)
+	
+	
+	!--------------------				!
+	!------------
+	! Defining the within-dyad (time-varying variables)	!
+	!------------
+	!--------------------				!
+	
+	WITHIN =  
+	dNAsFcwd  !daily negative mood (women)
+	dNAsMcwd  !daily negative mood (men)
+	
+	!time7c	 !diary day (centered at day 7)
+	Weekend	!Weekend (0=weekday, 1=weekend)
+	!dSAsMcwd  !daily awareness of support needs - men 
+         !dSApMcwd  !daily men's rating of women's awareness of men's support needs     
+         !dEEsMcwd  !daily emotional expressiveness - men        
+         !dEEpMcwd  !daily men's perceived emotional expressiveness of women
+       
+         !dSAsFcwd  !daily awareness of support needs - women 
+         !dSApFcwd  !daily women's rating of men's awareness of women's support needs     
+         !dEEsFcwd  !daily emotional expressiveness - women        
+         !dEEpFcwd  !daily women's perceived emotional expressiveness of men
+       
+         dSrEMO2M  !men receiving (EMOTIONAL + ESTEEM) support
+         dSrEMO2F  !women receiving (EMOTIONAL + ESTEEM) support  
+         
+         !dEA_Mcwd  !daily self-rated empathic accuracy, male          
+         !dEA_Fcwd  !daily self-rated empathic accuracy, female 
+	;
+
+
+	!--------------------				!
+	!------------
+	! Defining the between-dyad (time-varying variables)	!
+	!------------
+	!--------------------				!
+
+
+	 BETWEEN = 
+	
+	! No variables are specified as BETWEEN because Mplus will 
+	! restrict these variables to predicting time-invariant outcomes only.
+	! Level 2 variables in this model predict level 1 outcomes.
+	
+	! Daily negative mood (TI)
+         TI_NAsFc 
+        ! TI_NApMc
+         TI_NAsMc 
+        ! TI_NApFc
+                   
+         ! Daily support awarness and emotional expressiveness (TI; self + partner)
+         
+         !men's
+         !TI_SAsMc       
+         !TI_SApMc         
+         !TI_EEsMc            
+         !TI_EEpMc
+         !women's
+         !TI_SAsFc        
+         !TI_SApFc          
+         !TI_EEsFc             
+         !TI_EEpFc    
+         
+         !TI empathic accuracy and receipt of support
+         
+         !men's
+         !TI_EA_Mc
+         TIrEM2Mc
+         !women's
+         !TI_EA_Fc	
+         TIrEM2Fc
+         
+         ! Trait-like covariates -- empathy and negative emotionality         
+         bEMP_Mc  bEMP_Fc        
+         bNEG_Mc  bNEG_Fc ;
+         !bRSAT_Mc bRSAT_Fc  ;
+	
+	
+	
+		
+	! Variables that function both within and between (e.g.,
+	! any outcome variables, are in the USEVARIABLES statement,
+	! but NOT the WITHIN or the BETWEEN statements
+
+
+	! This is the grouping variable. So just Dyad ID
+	CLUSTER = CoupleID;
+	
+	! Missing values
+	
+	MISSING = .;
+
+ANALYSIS: 
+	TYPE = TWOLEVEL RANDOM;
+    ESTIMATOR = BAYES;
+    
+    !---------------------------
+    ! This analysis results in the following error if run as written:
+    ! *** FATAL ERROR
+    ! THE VARIANCE COVARIANCE MATRIX IS NOT SUPPORTED.
+    ! ONLY FULL VARIANCE COVARIANCE BLOCKS ARE ALLOWED.
+    ! USE ALGORITHM=GIBBS(RW) OR ALGORITHM=MH TO RESOLVE THIS PROBLEM.
+    !--------------------------
+    
+    !TURNING ON THE GIBBS STATEMENT BELOW WILL CORRECT THE FATAL ERROR
+    
+    
+    !ALGORITH=GIBBS(RW);
+
+DEFINE:
+
+
+
+MODEL: 
+
+
+
+	%WITHIN%
+					
+        !Latent Empathic accuracy slopes for men and women within dyad.	
+         eaM | dNApMcwd ON dNAsFcwd; 
+         eaF | dNApFcwd ON dNAsMcwd;
+		
+         dNApMcwd;
+         dNApFcwd;			
+
+        !daily covariates predicting men's emotional support.
+         dSpEMO2M ON Weekend;
+         dSpEMO2M ON dNAsMcwd;
+         dSpEMO2M ON dNAsFcwd;
+         dSpEMO2M ON dSrEMO2M;
+         
+         
+        !daily covariates predicting women's emotional support.
+         dSpEMO2F ON Weekend;
+         dSpEMO2F ON dNAsFcwd;
+         dSpEMO2F ON dNAsMcwd;
+         dSpEMO2F ON dSrEMO2F;
+         
+
+        
+	%BETWEEN%
+        !mean, or intercept for 's' slope for both partners
+    	[eaM] (eaMX); !saving parameters in case they need to be used later
+         [eaF] (eaFX); !saving parameters in case they need to be used later
+        
+        !variances of slopes
+         eaM;
+         eaF;
+
+        !means and variances for mixed outcome variables at the between level
+         [dNApMcwd];
+         [dNApFcwd];
+          dNApMcwd;
+          dNApFcwd;
+
+        !means for daily support outcomes (btw-dyad) (turned off b/c binary)       
+        ![dSpEMO2F] (b0F); 
+        ![dSpEMO2M] (b0M);
+        
+        !testing differences in the intercepts
+        	[dSpEMO2M$1] (tauM);	
+	[dSpEMO2F$1] (tauF);
+
+        
+        !variances of daily supp provision (between dyad) (turned off - binary)
+         dSpEMO2F; 
+         dSpEMO2M;
+      
+        !men's model of emotional support provision  
+         dSpEMO2M ON eaM;
+         dSpEMO2M ON TI_NAsMc(TIprvNAm);
+         dSpEMO2M ON TI_NAsFc;
+         !daily (TI) covariates
+         dSpEMO2M ON TIrEM2Mc;
+       
+         !trait covariates
+         dSpEMO2M ON bEMP_Mc (EMPm);
+         dSpEMO2M ON bNEG_Mc;
+         
+      
+        !women's model of emotional support provision
+         dSpEMO2F ON eaF;
+         dSpEMO2F ON TI_NAsFc(TIprvNAf);
+         dSpEMO2F ON TI_NAsMc ;
+        !daily (TI) covariates 
+         dSpEMO2F ON TIrEM2Fc;
+
+        !trait covariates
+         dSpEMO2F ON bEMP_Fc (EMPf);
+         dSpEMO2F ON bNEG_Fc;
+        
+
+        ! correlated slopes estimate trend synchrony
+        eaM WITH eaF (eaCOR);
+
+        ! correlated residuals estimate interdependence 
+        dSpEMO2F WITH dSpEMO2M;
+
+        ! correlations between EA slopes and support provision
+        
+        !--- You HAVE TO include correlations with both, or else it won't
+        !--- converge, because the varcov matrix ends up being incomplete.
+        
+        !Trend synchrony
+        eaM WITH dSpEMO2M;
+        eaF WITH dSpEMO2F;
+        
+        !Control correlations - for convergence
+        eaM WITH dSpEMO2F;
+        eaF WITH dSpEMO2M;
+        
+        
+
+MODEL CONSTRAINT: 
+NEW( INTdiff, L2prvNA, EMPdiff);
+
+!L1provNA = provNAm - provNAf;
+INTdiff = tauM - tauF;
+L2prvNA = TIprvNAm - TIprvNAf;
+EMPdiff = EMPm - EMPf;
+
+
+OUTPUT: STAND PATTERNS TECH1 TECH8;
