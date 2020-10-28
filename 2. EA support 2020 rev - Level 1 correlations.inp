@@ -1,0 +1,80 @@
+TITLE: EA support 2020 rev - level 1 correlations
+DATA: FILE = ea-es.MPLUS8.csv;
+
+VARIABLE: NAMES =
+CoupleID  TIME         time7c             Weekend           
+ID1_M     ID1_F        ROLE_M             ROLE_F            
+bSEX_M    pbSEX_M      bSEX_F             pbSEX_F           
+bEMP_Mc   bRSAT_Mc     bNEG_Mc 
+bEMP_Fc   bRSAT_Fc     bNEG_Fc 
+dNAs_M    dNAp_M
+dNAs_F    dNAp_F       
+dNAsMcwd  dNApMcwd      
+dNAsFcwd  dNApFcwd      
+TI_NAs_M  TI_NAp_M     
+TI_NAs_F  TI_NAp_F         
+TI_NAsMc  TI_NApMc     
+TI_NAsFc  TI_NApFc
+dNAsM_sd  dNApM_sd     dNAsF_sd          dNApF_sd          
+dNAsF_Z   dNAsM_Z      dNAsF_ZX          dNAsM_ZX          
+dSpEMO2M  dSpINS2M  
+dSsEMO2M  dSsINS2M     
+dSrEMO2M  dSrINS2M    
+dSpEMO2F  dSpINS2F  
+dSsEMO2F  dSsINS2F     
+dSrEMO2F  dSrINS2F   
+dSpEM2Mc  dSsEM2Mc     dSrEM2Mc         
+dSpIN2Mc  dSsIN2Mc     dSrIN2Mc
+dSpEM2Fc  dSsEM2Fc     dSrEM2Fc         
+dSpIN2Fc  dSsIN2Fc     dSrIN2Fc
+TIpEM2Mc  TIsEM2Mc     TIrEM2Mc         
+TIpIN2Mc  TIsIN2Mc     TIrIN2Mc
+TIpEM2Fc  TIsEM2Fc     TIrEM2Fc         
+TIpIN2Fc  TIsIN2Fc     TIrIN2Fc
+
+ 
+;
+
+	
+	USEVARIABLES = 
+dSpEMO2M dSpEMO2F
+dSpINS2M	dSpINS2F
+Weekend
+dNAsMcwd dNAsFcwd dNApMcwd dNApFcwd
+dSrEMO2M	  dSrEMO2F 
+dSrINS2M  dSrINS2F
+;                   
+
+	
+	! Missing values
+	
+	MISSING = .;
+
+
+ANALYSIS: 
+	TYPE = BASIC;
+ !   ESTIMATOR = BAYES;
+
+
+DEFINE:
+
+
+
+MODEL: 
+
+dSpEMO2M dSpEMO2F
+dSpINS2M	dSpINS2F
+Weekend
+dNAsMcwd dNAsFcwd dNApMcwd dNApFcwd
+dSrEMO2M	  dSrEMO2F
+dSrINS2M  dSrINS2F 
+    WITH
+dSpEMO2M dSpEMO2F
+dSpINS2M	dSpINS2F
+Weekend
+dNAsMcwd dNAsFcwd dNApMcwd dNApFcwd
+dSrEMO2M	  dSrEMO2F
+dSrINS2M  dSrINS2F ;
+
+
+OUTPUT: STAND PATTERNS TECH1;
